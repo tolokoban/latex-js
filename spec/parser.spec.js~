@@ -1,0 +1,5 @@
+var Parser = require("../lib/parser");
+
+describe('Module `parser`', function() {
+    
+});

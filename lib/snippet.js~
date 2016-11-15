@@ -1,0 +1,53 @@
+"use strict";
+
+var FS = require("fs");
+var Path = require("path");
+
+
+var Snippet = function(fd, dirname, output) {
+    this._fd = fd;
+    this._dirname = dirname;
+    this._output = output;
+    this._ctx = {
+        flush: function( content ) {
+            FS.writeSync( fd, content );
+        }
+    };
+};
+
+
+/**
+ * @return void
+ */
+Snippet.prototype.exec = function(item) {
+    var module = loadModule( item.name, this._dirname );
+    if( typeof module !== 'function' ) {
+        throw "Snippet " + JSON.stringify( item.name )
+            + " must be a `function`!\n\n"
+            + "module.exports = function() { ... };";
+    }
+
+    try {
+
+    }
+    catch( ex ) {
+        console.error( "========================================" );
+        console.error( "An exception has been thrown from snippet " + JSON.stringify(  item, null, '  ' ) );
+        console.error( ex );
+        console.error( "----------------------------------------" );
+    }
+};
+
+
+function loadModule(name, dirname) {
+    try {
+        var filename = Path.join( dirname, name + ".js" );
+        return require(filename);
+    }
+    catch( ex ) {
+        throw "Unable to load snippet " + JSON.stringify( name )
+            + " from directory " + JSON.stringify( dirname );
+    }
+}
+
+module.exports = Snippet;

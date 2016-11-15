@@ -1,0 +1,9 @@
+"use strict";
+
+/**
+ * @param {string} source - Enhanced LaTeX source code.
+ * @return {array} Items of this array can be __strings__ or __objects__.
+ */
+module.exports = function( source ) {
+
+};

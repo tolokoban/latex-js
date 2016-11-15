@@ -1,0 +1,97 @@
+\documentclass[10pt,a4paper,onecolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{graphicx}
+
+\lstset{
+  language=Java,
+  showstringspaces=false,
+  formfeed=newpage,
+  frame=single,
+  frameround=tttt
+  tabsize=2,
+  commentstyle=itshape,
+  morekeywords={models, lambda, forms}
+}
+
+\author{Fabien PETITJEAN}
+\title{D499. Les carrés séquençables}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+{\it Ce problème, proposé par Michel Lafond, provient du site {\tt http://diophante.fr}.}
+
+\vspace{.5cm}
+
+Le carré $C_n$ de côté $n$ est dit séquençable si on peut le paver entièrement et sans chevauchement avec les rectangles $R_1,R_2, \ldots,R_k$  dont les dimensions $[a_1,a_2], [a_3,a_4],\ldots,[a_{2k-1} ,a_{2k}]$   sont à l’ordre près les entiers  $1,2,3,\ldots,2k$.
+\begin{itemize}
+\item Démontrer que le plus petit carré séquençable est $C_{11}$.
+\item Trouver tous les entiers inférieurs ou égaux à 30 pour lesquels il existe un carré séquençable $C_n$.
+\end{itemize}
+
+Ci-après, à titre d'exemple, le carré séquençable $C_{13}$. Il est pavable avec les 5 rectangles $[1,2],[3,8],[4,5],[6,10]$ et $[7,9]$ dont les dimensions sont 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline A&A&A&A&A&A&A&A&B&B&B&B&B \\
+\hline A&A&A&A&A&A&A&A&B&B&B&B&B \\
+\hline A&A&A&A&A&A&A&A&B&B&B&B&B \\
+\hline C&C&C&C&C&C&D&D&B&B&B&B&B \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline C&C&C&C&C&C&E&E&E&E&E&E&E \\
+\hline
+\end{tabular}
+\end{abstract}
+
+\section{Solution}
+Recherchons d'abord le nombre minimal de rectangles nécessaires à paver un carré dans les conditions du problème.
+
+
+\begin{enumerate}
+\item Il est évident qu'un rectangle ne suffit pas.
+\item Si on pouvait paver un carré avec deux rectangles, ces rectangles auraient un côté en commun, donc de même longueur, ce qui est contraire à l'énoncé.
+\item Si on considère trois rectangles, on a les 5 configurations suivantes :\\
+\begin{itemize}
+\item $1 \times 2 + 3 \times 4 + 5 \times 6 = 44$.
+\item $1 \times 3 + 2 \times 4 + 5 \times 6 = 41$.
+\item $1 \times 4 + 2 \times 3 + 5 \times 6 = 40$.
+\item $1 \times 5 + 2 \times 3 + 4 \times 6 = 35$.
+\item $1 \times 6 + 2 \times 3 + 4 \times 5 = 32$.
+\end{itemize}
+Comme on le constate, la somme des aires des trois rectangles ne donne jamais un carré. Donc on ne peut paver aucun carré avec trois rectangles.
+\item Avec le même raisonnement, on remarque que sur les 7 configurations possibles, 2 pourraient paver une carré de côté 10 et 9 respectivement :
+\begin{itemize}
+\item \fbox{$1 \times 2 + 3 \times 4 + 5 \times 6 + 7 \times 8 = 100 = 10^2$}.
+\item $1 \times 3 + 2 \times 4 + 5 \times 6 + 7 \times 8 = 97$.
+\item $1 \times 4 + 2 \times 3 + 5 \times 6 + 7 \times 8 = 96$.
+\item $1 \times 5 + 2 \times 3 + 4 \times 6 + 7 \times 8 = 91$.
+\item $1 \times 6 + 2 \times 3 + 4 \times 5 + 7 \times 8 = 88$.
+\item \fbox{$1 \times 7 + 2 \times 3 + 4 \times 5 + 6 \times 8 = 81 = 9^2$}.
+\item $1 \times 8 + 2 \times 3 + 4 \times 5 + 6 \times 7 = 76$.
+\end{itemize}
+Dans le premier cas, on a les rectangles $R(1,2)$, $R(3,4)$, $R(5,6)$ et R$(7,8)$. Aucun de ces rectangles n'est assez grand pour couvrir à lui seul un côté du carré (dont la longueur est 10). Comme c'est vrai pour chacun des 4 côtés, il nous faut donc au moins deux rectangles par côté. Et avec 4 rectangles, il est impossible d'en avoir plus de 2. En effet, si on utilise 3 rectangles pour un côté, on aura forcément un côté avec un seul rectangle, ce qui est impossible.
+
+Dans ce cas, chaque rectangle doit se trouver dans un coin du carré. On peut donc considérer que le rectangle $R(1,2)$ est situé en haut à gauche du carré de $10\times 10$. Il mesure 1 en largeur et 2 en hauteur. A sa droite, il faudrait un rectangle avec un bord de longueur 9, mais il n'en existe aucun de cette taille. Cette configuration est donc impossible.
+
+Dans le second cas, on a les rectangles $R(1,7)$, $R(2,3)$, $R(4,5)$ et R$(6,8)$. En utilisant le même raisonnement, on place le $R(1,7)$ en haut à gauche et il doit forcément avoir comme immédiat voisin de droite le $R(8,6)$. On peut aussi placer le $R(2,3)$ en bas à gauche. Mais alor, il nous faudrait un rectangle de largeur $6$ en bas à droite et malheureusement, on l'a déjà utilisé en haut à droite.
+
+\item .0.
+\end{enumerate}
+
+%\lstinputlisting{perms.js}
+
+
+\end{document}
