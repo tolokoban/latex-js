@@ -75,13 +75,22 @@ module.exports = function() {
 \section{Module tables}
 {{permutation [1, two, "three"]}}
 ```
+> As you can see here, the only difference betwee real JSON and the JSON-like used in argument is that strings made by only chars and underscores can be used without quotes.
 
 ```javascript
 module.exports = function() {
-    if( !Array.isArray( this.arg ) || this.arg.length != 3 ) {
+    var arr = this.arg;
+    if( !Array.isArray( arr ) || arr.length != 3 ) {
         this.fatal( "An array of length 3 is expected as argument!" );
     }
-  this.begin( "itemize" );
-  
-  this.end( "itemize" );
+    this.begin( "tabular", "{|c|c|c|}" );
+    this.flush( "\\hline ", arr[0], "&", arr[1], "&", arr[2], "\\\n" );
+    this.flush( "\\hline ", arr[0], "&", arr[2], "&", arr[1], "\\\n" );
+    this.flush( "\\hline ", arr[1], "&", arr[0], "&", arr[2], "\\\n" );
+    this.flush( "\\hline ", arr[2], "&", arr[0], "&", arr[1], "\\\n" );
+    this.flush( "\\hline ", arr[1], "&", arr[2], "&", arr[0], "\\\n" );
+    this.flush( "\\hline ", arr[2], "&", arr[1], "&", arr[0], "\\\n" );
+    this.flush( "\\hline" );
+    this.end( "itemize" );
+};
 ```
