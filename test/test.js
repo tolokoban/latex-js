@@ -1,3 +1,3 @@
 module.exports = function() {
-    this.flush( "{\Huge My name}" );
+    this.flush( "{\\Huge My name}" );
 };
