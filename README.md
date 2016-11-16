@@ -94,3 +94,22 @@ module.exports = function() {
     this.end( "itemize" );
 };
 ```
+
+## API
+Snippets can access the __latex-js__ API through the `this` variable.
+
+### flush( ... )
+Write all the given arguments to the output file.
+
+### fatal( msg : string )
+Stop the snippet processing and displays `msg` as an error message.
+If stuff has already been flushed to the output, it will __not__ be rollbacked.
+
+### begin( env, ... )
+This is equivalent to `this.flush( '\\begin{' + env + '}', ... );`.
+
+### end( env )
+This is equivalent to `this.flush( '\\end{' + env + '}' );`.
+
+### escape( text ) : string
+Return `text` with the following chars escaped: `& % $ # _ { } ~ ^ \`.
