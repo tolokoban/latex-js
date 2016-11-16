@@ -11,8 +11,7 @@
     "url": "git+https://github.com/tolokoban/latex-js.git"
   },
   "keywords": [
-    "LaTeX",
-    "snippet"
+    "latex", "snippet", "xelatex", "pdf", "template"
   ],
   "author": "Tolokoban",
   "license": "GPL-3.0",
