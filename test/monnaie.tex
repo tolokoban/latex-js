@@ -33,14 +33,42 @@ Etude d'algorithmes capables de faire l'appoint avec le moins de pièces possibl
 \section{L'algorithme glouton}
 Ce qui vient d'abord à l'esprit, est l'algorithme que tout le monde utilise dans la vie quotidienne, souvent sans le savoir. Il consiste à donner en premier les plus grosses pièces dont on dispose et de continuer ainsi jusqu'à atteindre la somme voulue.
 
-Par exemple, si on dispose de pièces de 5, 2 et 1 et que l'on doit payer 13€, on fera ceci :
+Voici des exemples d'appoint avec différents jeux de monnaie.
 
-{{greedy [57, 10,5,4,1]}}
+{{greedy [57, 10,7,5,1]}}
 {{greedy [13, 5,2,1]}}
 {{greedy [8, 5,4,1]}}
 
+Dans ce dernier exemple, on voit qu'il aurait été plus intéressant d'utiliser deux pièces de 4 au lieu de 5, 1, 1 et 1. On se rend donc compte que cet algorithme ne donne pas toujours la solution optimale, c'est-à-dire celle qui minimise le nombre de pièces utilisées.
+
+Mais il a quand même le grand avantage d'être simple à implémenter et à utiliser.
+
+%\lstinputlisting{code.greedy.js}
+\begin{lstlisting}
+function money( total, coins ) {
+   var result = [];
+   var index = 0;
+   while( total > 0 ) {
+      while( index < coins.length && coins[index] > total ) index++;
+      if( index >= coins.length ) break;
+      result.push( coins[index] );
+      total -= coins[index];        
+   }
+   return result;
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item total : {\it nombre} - Somme totale à régler.
+\item coins : {\it tableau} - Tableau des valeurs des différentes pièces, rangées par ordre décroissant.
+\end{itemize}
+Le retour est un tableau de pièces utilisées.
+
+Toutes les fonctions présentées dans ce document ont la même signature.
 
 
+
+\section{L'arbre des possibles}
 
 
 \end{document}
