@@ -8,12 +8,16 @@ Snippets are added into your LaTeX file with the double curly syntax.
 npm install -g latex-js
 ```
 
-You need to have a LaTeX distribution installed with, at least, `xelatex`.
-
 ## Usage
 This command will show you what arguments and options are expected.
 ```
 latex-js
+```
+
+## Integration with TexMaker
+Go to the `Options -> Configure Texmaker` menu. Here is an example of how to modify the `xelatex` command :
+```
+latex-js "%.tex" -post "xelatex -synctex=1 -interaction=nonstopmode %.ready"
 ```
 
 ## Simple case

@@ -4,4 +4,7 @@ out/
 *.aux
 .#*
 *#
+*.pdf
+*.ready
+*.synctex.gz
 

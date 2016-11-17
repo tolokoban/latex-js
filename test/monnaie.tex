@@ -1,5 +1,4 @@
 \documentclass[10pt,a4paper,onecolumn]{article}
-\usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[margin=2cm]{geometry}
 \usepackage[T1]{fontenc}
@@ -26,11 +25,22 @@
 
 \begin{document}
 \maketitle
+
 \begin{abstract}
 Etude d'algorithmes capables de faire l'appoint avec le moins de pièces possibles.
 \end{abstract}
 
-\section{L'algorithme gourmand}
+\section{L'algorithme glouton}
+Ce qui vient d'abord à l'esprit, est l'algorithme que tout le monde utilise dans la vie quotidienne, souvent sans le savoir. Il consiste à donner en premier les plus grosses pièces dont on dispose et de continuer ainsi jusqu'à atteindre la somme voulue.
+
+Par exemple, si on dispose de pièces de 5, 2 et 1 et que l'on doit payer 13€, on fera ceci :
+
+{{greedy [57, 10,5,4,1]}}
+{{greedy [13, 5,2,1]}}
+{{greedy [8, 5,4,1]}}
+
+
+
 
 
 \end{document}
