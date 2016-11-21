@@ -15,8 +15,8 @@ module.exports = function() {
         result.coins.push( coins[index] );
         total -= coins[index];        
     }
-    this.flush( '\n\n' );
-    this.flush( '\\noindent Pièces disponibles: ', coins.join(', '), '.\n\n' );
+    this.flush( '\n\n\\vspace{2mm}' );
+    this.flush( '\\noindent Pièces disponibles: ', coins.join(', '), '.\n\n\\noindent' );
     this.begin( 'tabular', '{|l' + this.mul( 'c', result.total.length ) + '|}' );
     this.flush( '\\hline ' );
     this.flush( 'Somme restante ' );
@@ -31,5 +31,5 @@ module.exports = function() {
     this.newline();
     this.flush( '\\hline' );
     this.end( 'tabular' );
-    this.flush( '\n\n' );
+    this.flush( '\n\n\\vspace{2mm}' );
 };

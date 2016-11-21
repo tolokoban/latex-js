@@ -5,13 +5,14 @@ var Path = require("path");
 var Exec = require("child_process").exec;
 var Timers = require("timers");
 
+var Utils = require("./lib/utils");
 var Compiler = require("./lib/compiler");
 
-                    /*
-                    var cmd = "xelatex -synctex=1 -interaction=nonstopmode "
-                            + "-output-directory=" + Path.dirname( texfilename )
-                            + " \"" + texfilename + "\"";
-                     */
+/*
+ var cmd = "xelatex -synctex=1 -interaction=nonstopmode "
+ + "-output-directory=" + Path.dirname( texfilename )
+ + " \"" + texfilename + "\"";
+ */
 var PREDEFINED_COMMANDS = {
     //xelatex: 'xelatex -synctex=1 -interaction=nonstopmode -output-directory={{DIR}} {{FILE}}'
     xelatex: 'xelatex -synctex=1 -interaction=nonstopmode {{FILE}}'
@@ -67,7 +68,7 @@ for( var argIdx = 2 ; argIdx < process.argv.length ; argIdx++ ) {
         } else {
             post = PREDEFINED_COMMANDS[arg.substr( 1 )];
             if( typeof post === 'undefined' )
-                fatal( "Unknown option: " + arg + "!" );            
+                fatal( "Unknown option: " + arg + "!" );
         }
     } else {
         filename = Path.resolve( arg );
@@ -80,70 +81,68 @@ for( var argIdx = 2 ; argIdx < process.argv.length ; argIdx++ ) {
 
 /**
  * @param {string} input - Input filename.
- * @param {string} post - Command to execute after the templating.
  */
-function compile( post, input ) {
-    FS.readFile(input, function( error, stream ) {
-        if( error ) {
-            console.error( "Unable to read file " + JSON.stringify( input ) + "!");
-            console.error( error );
-        } else {
-            var content = stream.toString();
-            var filepathinfo = Path.parse( Path.resolve( input ) );
-            filepathinfo.ext = "." + extension;
-            delete filepathinfo.base;
-            // `output` is `input` with antother extension.
-            var output = Path.format( filepathinfo );
-            if( input == output ) {
-                fatal( "Input and output files have the same extension!" );
-            }
-            
-            Compiler(
-                content,
-                Path.dirname( Path.resolve( input ) ),
-                output,
-                function(texfilename) {
-                    console.log( "Done." );
-                    if( !post ) return;
-                    
-                    var local = Path.resolve( '.' );
-                    var cmd = '' + post;
-                    cmd = cmd.replace(
-                            /{{DIR}}/g,
-                        JSON.stringify( Path.resolve( Path.dirname( texfilename ) ) )
-                    ).replace( /{{FILE}}/g, JSON.stringify( Path.basename( texfilename ) ) );
-                    console.log( "> " + cmd );
-                    Exec( cmd, (error, stdout, stderr) => {
-                        if( error ) {
-                            console.error( "### " + error );
-                            console.error( error.stack );
-                            var filepathinfo = Path.parse( Path.resolve( input ) );
-                            filepathinfo.ext = ".log";
-                            delete filepathinfo.base;
-                            var logfilename = Path.format( filepathinfo );
-                            console.error( "See log file for more info: " + logfilename);
-                            //console.error( FS.readFileSync( logfilename).toString() );
-                        } else {
-                            if( stderr ) {
-                                console.error( "### TeX file has errors!" );
-                                console.error( "### " + texfilename );
-                                console.error( stderr );
-                            } else {
-                                stdout.split( "\n" ).forEach(function (line) {
-                                    if( line.substr( 0, 14 ) == "Output written" ) {
-                                        console.log( line );
-                                    }
-                                });
-                            }
-                        }
-                    });
+function compile( input ) {
+    try {
+        FS.readFile(input, function( error, stream ) {
+            if( error ) {
+                console.error( "Unable to read file " + JSON.stringify( input ) + "!");
+                console.error( error );
+                console.error( error.stack );
+            } else {
+                var content = stream.toString();
+                // `output` is `input` with antother extension.
+                var output = Utils.changeExt( input, extension );
+                if( input == output ) {
+                    fatal( "Input and output files have the same extension!" );
                 }
-            );
-        }
-    });
+
+                Compiler(
+                    content,
+                    Path.dirname( Path.resolve( input ) ),
+                    output,
+                    function(texfilename) {
+                        console.log( "Done." );
+                        if( !post ) return;
+
+                        var local = Path.resolve( '.' );
+                        var cmd = Utils.template( post, {
+                            DIR: JSON.stringify( Path.resolve( Path.dirname( texfilename ) ) ),
+                            FILE: JSON.stringify( Path.basename( texfilename ) )
+                        });
+                        console.log( "> " + cmd );
+                        Exec( cmd, (error, stdout, stderr) => {
+                            if( error ) {
+                                console.error( "### " + error );
+                                console.error( error.stack );
+                                var logfilename = Utils.changeExt( input, 'log' );
+                                console.error( "See log file for more info: " + logfilename);
+                                //console.error( FS.readFileSync( logfilename).toString() );
+                            } else {
+                                if( stderr ) {
+                                    console.error( "### TeX file has errors!" );
+                                    console.error( "### " + texfilename );
+                                    console.error( stderr );
+                                } else {
+                                    stdout.split( "\n" ).forEach(function (line) {
+                                        if( line.substr( 0, 14 ) == "Output written" ) {
+                                            console.log( line );
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                );
+            }
+        });
+    }
+    catch( ex ) {
+        console.error( ex.stack );
+    }
 }
 
-inputs.forEach( compile.bind( null, post ) );
+inputs.forEach( compile );
 
 if( watchmode ) {
     var jobs = [];
@@ -151,12 +150,12 @@ if( watchmode ) {
     function processNextJob() {
         while( jobs.length > 0 ) {
             var input = jobs.shift();
-            compile( true, input );
+            compile( input );
         }
         // No more jobs: go to sleep.
         Timers.setTimeout( processNextJob, 100 );
     }
-    
+
     console.log();
     // Watch mode: we loop for ever and compile as soon as a file has changed.
     inputs.forEach(function (input) {
