@@ -165,23 +165,23 @@ Et hop ! Une nouvelle identité remarquable nous apparait : $a^2 - b^2 = (a+b)(a
 Résultat : \fbox{$x^2-4x-5 = (x-2)^2 \; -3^2 = (x-2-3)(x-2+3)=(x-5)(x+1)$}.
 
 
-\section{Exercices}
+
+\section{Exercices trop rigolos !!}
 \subsection{Développer et simplifier}
 \begin{enumerate}
 \item $(a+b)(a+b)=\ldots$
 \item $(a+b)(a-b)=\ldots$
 \item $(x^4+x^3+x^2+x+1)(x-1)=\ldots$
 \item $43-(x^2 - 24 + x)+29-x^2+x=\ldots$
-\item $(x-1)(x+2)(x-5)=\ldots$
 \item $(x-1)(y-1)(z-1)=\ldots$
 \item $x^3 -7 - (3x+x^2)(3+x)=\ldots$
 \end{enumerate}
 
 \subsection{Factoriser et simplifier}
 \begin{enumerate}
-\item ${\pi (10-x)\over 8}+{x\over 8}\pi-{\pi\over 2}{13\over 4}=\ldots$
+\item ${\pi (10-x)\over 8}+{x\over 8}\pi=\ldots$
 \item $x^2-4x-5=\ldots$
-\item ${ {x^3-4x^2-7x+10\over x^2-7x-10}\over{1+x\over x^2-1}}=\ldots$
+\item ${(x-1)(3x+7)\over {3-x}}=\ldots$
 \end{enumerate}
 
 
